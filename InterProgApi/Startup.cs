@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using InterProgApi.Core;
 using InterProgApi.Data;
 using InterProgApi.helpers;
 using InterProgApi.Models;
+using InterProgApi.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
 namespace InterProgApi
@@ -32,12 +36,13 @@ namespace InterProgApi
                     {
                         user.Password = MyEncoder.ComputeSha256Hash(user.Password);
                     }
-                    context.Users.AddRange(users);    
+                    context.Users.AddRange(users);
                 }
 
                 if (context.Courses.ToList().Count == 0)
                 {
-                    Course newCourse = new Course(){
+                    Course newCourse = new Course()
+                    {
                         Name = "c++",
                         Description = "Learn smth about c++",
                         Problems = new List<Problem>{
@@ -74,7 +79,7 @@ namespace InterProgApi
                             }
                         }
                     };
-                    context.Courses.Add(newCourse);    
+                    context.Courses.Add(newCourse);
                 }
 
                 context.SaveChanges();
@@ -85,6 +90,18 @@ namespace InterProgApi
         {
             services.AddControllers();
             services.AddDbContext<DatabaseContext>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                   .AddJwtBearer(options =>
+                   {
+                       options.TokenValidationParameters = new TokenValidationParameters
+                       {
+                           ValidateIssuer = false,
+                           ValidateAudience = false,
+                           IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                           ValidateIssuerSigningKey = true
+                       };
+                   });
 
             services.AddControllers().AddNewtonsoftJson(o =>
             {
