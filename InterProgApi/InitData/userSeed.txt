@@ -1,0 +1,9 @@
+[
+  '{{repeat(20)}}',
+  {
+    Name:"{{firstName()}}",
+    Surname:"{{surname()}}",
+    Email:"{{email(true)}}",
+    Password:"12345"
+  }
+]

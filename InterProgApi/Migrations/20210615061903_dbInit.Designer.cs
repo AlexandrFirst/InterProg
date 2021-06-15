@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InterProgApi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20210614200554_course_problem_reference_added")]
-    partial class course_problem_reference_added
+    [Migration("20210615061903_dbInit")]
+    partial class dbInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -72,6 +72,10 @@ namespace InterProgApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("TestJson")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -79,6 +83,9 @@ namespace InterProgApi.Migrations
                     b.HasKey("ProblemId");
 
                     b.HasIndex("CourseId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Problems");
                 });
@@ -95,6 +102,10 @@ namespace InterProgApi.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

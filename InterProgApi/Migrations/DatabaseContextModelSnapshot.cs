@@ -70,6 +70,10 @@ namespace InterProgApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("TestJson")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -77,6 +81,9 @@ namespace InterProgApi.Migrations
                     b.HasKey("ProblemId");
 
                     b.HasIndex("CourseId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Problems");
                 });
@@ -93,6 +100,10 @@ namespace InterProgApi.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

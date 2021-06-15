@@ -16,6 +16,9 @@ namespace InterProgApi.Data
         [Required]
         public string Email { get; set; }
 
+        [Required]
+        public string Password { get; set; }
+
         public virtual ICollection<UserProblem> UserProblems { get; set; }
         public virtual ICollection<Course> Courses { get; set; } = new HashSet<Course>();
     }
